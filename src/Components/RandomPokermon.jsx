@@ -2,13 +2,15 @@ import React from "react";
 import { Component } from "react";
 import PokemonService from "../Services/PokemonService";
 import Spinner from "./Spinner/Spinner";
+import Error from "./Error/Error";
 
 class RandomPokermon extends Component {
     constructor(props) {
         super(props)
         this.state = {
             char: {},
-            loading: true
+            loading: true,
+            error: false
         }
         this.randomChar()
     }
@@ -22,19 +24,32 @@ class RandomPokermon extends Component {
         })
     }
 
+    onError = () => {
+        this.setState({
+            error: true,
+            loading: false
+        })
+    }
+
     randomChar = () => {
-        const id = Math.floor(Math.random() * (0 - 905) + 905)
+        const id = Math.floor(Math.random() * (0 - 905) + 1111)
         console.log(id);
-        this.pokemonService.getChar(id).then(this.onCharLoaded)
+        this.pokemonService.getChar(id).then(this.onCharLoaded).catch(this.onError)
         this.pokemonService.getAllChars().then(res => console.log(res))
     }
 
     render() {
-        const {char, loading} = this.state
+        const {char, loading, error} = this.state
+
+        const errorMessage = error ? <Error/> : null
+        const spinner = loading ? <Spinner/> : null
+        const okContent = !(loading || error) ? <View char={char}/> : null
 
         return(
             <div>
-                {loading ? <Spinner/> : <View char={char}/>}
+                {errorMessage}
+                {spinner}
+                {okContent}
                 <button type="button" className="m-2 btn btn-success">Random one</button>
             </div>
         )
