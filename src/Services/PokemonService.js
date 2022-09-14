@@ -1,3 +1,5 @@
+import defaultImg from './no-image.jpg'
+
 class PokemonService {
     _apiBase = "https://pokeapi.co/api/v2/pokemon"
 
@@ -23,7 +25,7 @@ class PokemonService {
 
     _transformChar = (res) => {
         const img = res.sprites.other.dream_world.front_default
-        const defaultImg = "https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png"
+        //const defaultImg = defaultImg
         return {
             name: res.name,
             height: res.height,
