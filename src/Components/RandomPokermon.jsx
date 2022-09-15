@@ -5,22 +5,32 @@ import Spinner from "./Spinner/Spinner";
 import Error from "./Error/Error";
 
 class RandomPokermon extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            char: {},
-            loading: true,
-            error: false
-        }
-        this.randomChar()
+
+    state = {
+        char: {},
+        loading: true,
+        error: false
     }
 
     pokemonService = new PokemonService()
 
+    componentDidMount() {
+        this.randomChar()
+    }
+
     onCharLoaded = (res) => {
+        console.log(res);
         this.setState({
             char: res,
-            loading: false
+            loading: false,
+            error: false,
+        })
+    }
+
+    onCharLoading = () => {
+        this.setState({
+            loading: true,
+            error: false,
         })
     }
 
@@ -34,8 +44,9 @@ class RandomPokermon extends Component {
     randomChar = () => {
         const id = Math.floor(Math.random() * (0 - 905) + 1111)
         console.log(id);
+        this.onCharLoading()
         this.pokemonService.getChar(id).then(this.onCharLoaded).catch(this.onError)
-        this.pokemonService.getAllChars().then(res => console.log(res))
+        //this.pokemonService.getAllChars().then(res => console.log(res))
     }
 
     render() {
@@ -50,7 +61,10 @@ class RandomPokermon extends Component {
                 {errorMessage}
                 {spinner}
                 {okContent}
-                <button type="button" className="m-2 btn btn-success">Random one</button>
+                <button 
+                    type="button"
+                    className="m-2 btn btn-success"
+                    onClick={this.randomChar} >Random one</button>
             </div>
         )
     }
