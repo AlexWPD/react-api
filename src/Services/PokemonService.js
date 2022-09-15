@@ -14,7 +14,7 @@ class PokemonService {
     }
 
     getAllChars = async () => {
-        const res = await this.getResource(`${this._apiBase}?limit=12&offset=0`)
+        const res = await this.getResource(`${this._apiBase}?limit=5&offset=0`)
         return res.results.map(item => item.name)
     }
 
@@ -25,7 +25,6 @@ class PokemonService {
 
     _transformChar = (res) => {
         const img = res.sprites.other.dream_world.front_default
-        //const defaultImg = defaultImg
         return {
             name: res.name,
             height: res.height,

@@ -19,7 +19,6 @@ class RandomPokermon extends Component {
     }
 
     onCharLoaded = (res) => {
-        console.log(res);
         this.setState({
             char: res,
             loading: false,
