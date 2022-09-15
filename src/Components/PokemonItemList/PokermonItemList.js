@@ -5,7 +5,7 @@ import PokemonItem from "../PokermonItem/PokemonItem"
 class PokemonItemList extends Component {
 
     state = {
-        pokemonItem: null
+        pokemonsArr: []
     }
 
     pokemonService = new PokemonService()
@@ -14,29 +14,38 @@ class PokemonItemList extends Component {
         this.charList()
     }
 
-    onCreateList = (res) => {
-        const pokemonItem = res.map((item, index) => {
+    charList = () => {
+        this.pokemonService.getAllChars().then(this.onListLoaded)
+    }
+
+    onListLoaded = (res) => {
+        this.setState({
+            pokemonsArr: res
+        })
+    }
+
+    renderItems = (arr) => {
+        const items = arr.map((item, index) => {
             return (
                 <PokemonItem key={index} name={item}/>
             )
         })
-        this.setState({
-            pokemonItem: pokemonItem
-        })
+
+        return items
     }
 
-    charList = () => {
-        this.pokemonService.getAllChars().then(this.onCreateList)
-    }
 
     render() {
-        const {pokemonItem} = this.state
+        const {pokemonsArr} = this.state
+
+        const pokemonItems = this.renderItems(pokemonsArr)
+
         return(
             <div className="container">
                 <div className="row">
                     <div className="col">
                         <ul className="list-group">
-                        {pokemonItem}
+                            {pokemonItems}
                         </ul>
                     </div>
                     <div className="col">
