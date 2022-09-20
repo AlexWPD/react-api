@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import PokemonService from "../Services/PokemonService";
+import PokemonFetch from "../Services/Fetch";
 import Spinner from "./Spinner/Spinner";
 import Error from "./Error/Error";
 
@@ -12,7 +12,7 @@ class RandomPokermon extends Component {
         error: false
     }
 
-    pokemonService = new PokemonService()
+    pokemonFetch = new PokemonFetch()
 
     componentDidMount() {
         this.randomChar()
@@ -41,11 +41,11 @@ class RandomPokermon extends Component {
     }
 
     randomChar = () => {
-        const id = Math.floor(Math.random() * (0 - 905) + 1111)
+        const id = Math.floor(Math.random() * (0 - 905) + 1000)
         console.log(id);
         this.onCharLoading()
-        this.pokemonService.getChar(id).then(this.onCharLoaded).catch(this.onError)
-        //this.pokemonService.getAllChars().then(res => console.log(res))
+        this.pokemonFetch.getChar(id).then(this.onCharLoaded).catch(this.onError)
+        //this.pokemonFetch.getAllChars().then(res => console.log(res))
     }
 
     render() {
@@ -70,14 +70,14 @@ class RandomPokermon extends Component {
 }
 
 const View = ({char}) => {
-    const {name, height, image} = char
+    const {name, experience, image} = char
     return (
         <>
             <div className="p-2">
                 <img src={image} alt="" />
             </div>
             <h2 className="m-2">{name}</h2>
-            <div className="m-2">Height: {height} sm</div>
+            <div className="m-2">Experience: {experience}</div>
         </>
     )
 }

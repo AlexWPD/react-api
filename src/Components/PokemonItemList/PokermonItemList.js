@@ -1,5 +1,5 @@
 import { Component } from "react"
-import PokemonService from "../../Services/PokemonService"
+import PokemonFetch from "../../Services/Fetch"
 import PokemonItem from "../PokermonItem/PokemonItem"
 
 class PokemonItemList extends Component {
@@ -8,14 +8,14 @@ class PokemonItemList extends Component {
         pokemonsArr: []
     }
 
-    pokemonService = new PokemonService()
+    pokemonFetch = new PokemonFetch()
 
     componentDidMount() {
         this.charList()
     }
 
     charList = () => {
-        this.pokemonService.getAllChars().then(this.onListLoaded)
+        this.pokemonFetch.getAllChars().then(this.onListLoaded)
     }
 
     onListLoaded = (res) => {
@@ -25,9 +25,13 @@ class PokemonItemList extends Component {
     }
 
     renderItems = (arr) => {
+        const {onItemSelected} = this.props
         const items = arr.map((item, index) => {
             return (
-                <PokemonItem key={index} name={item}/>
+                <PokemonItem 
+                key={index}
+                name={item.name}
+                onItemSelected={() => onItemSelected(index)} />
             )
         })
 
@@ -41,18 +45,9 @@ class PokemonItemList extends Component {
         const pokemonItems = this.renderItems(pokemonsArr)
 
         return(
-            <div className="container">
-                <div className="row">
-                    <div className="col">
-                        <ul className="list-group">
-                            {pokemonItems}
-                        </ul>
-                    </div>
-                    <div className="col">
-                        Column
-                    </div>
-                </div>
-            </div>
+            <>
+                {pokemonItems}
+            </>
         )
     }
 }
