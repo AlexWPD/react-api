@@ -1,11 +1,11 @@
 import { Component } from "react"
 import PokemonFetch from "../../Services/Fetch"
-import PokemonItem from "../PokermonItem/PokemonItem"
 
 class PokemonItemList extends Component {
 
     state = {
-        pokemonsArr: []
+        pokemonsArr: [],
+        offset: 0
     }
 
     pokemonFetch = new PokemonFetch()
@@ -18,20 +18,28 @@ class PokemonItemList extends Component {
         this.pokemonFetch.getAllChars().then(this.onListLoaded)
     }
 
-    onListLoaded = (res) => {
-        this.setState({
-            pokemonsArr: res
-        })
+    addNewCharItems = (offset) => {
+        this.pokemonFetch.getAllChars(offset).then(this.onListLoaded)
+    }
+
+    onListLoaded = (newRes) => {
+        console.log(newRes);
+        this.setState((state) => ({
+            pokemonsArr: [...state.pokemonsArr, ...newRes],
+            offset: state.offset + 3
+        }))
     }
 
     renderItems = (arr) => {
         const {onItemSelected} = this.props
         const items = arr.map((item, index) => {
-            return (
-                <PokemonItem 
-                key={index}
-                name={item.name}
-                onItemSelected={() => onItemSelected(index)} />
+            return(
+                <li 
+                    key={index}
+                    className="list-group-item fs-4"
+                    onClick={() => onItemSelected(index)} >
+                    {item.name}
+                </li>
             )
         })
 
@@ -40,14 +48,19 @@ class PokemonItemList extends Component {
 
 
     render() {
-        const {pokemonsArr} = this.state
-
+        const {pokemonsArr, offset} = this.state
         const pokemonItems = this.renderItems(pokemonsArr)
 
         return(
-            <>
+            <div>
                 {pokemonItems}
-            </>
+                <button 
+                    type="button"
+                    className="m-2 btn btn-primary"
+                    onClick={() => this.addNewCharItems(offset)} >
+                        Show more
+                </button>
+            </div>
         )
     }
 }

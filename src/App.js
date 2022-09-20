@@ -11,9 +11,9 @@ class App extends Component {
     selectedItemId: null
   }
 
-  onItemSelected = (index) => {
+  onItemSelected = (id) => {
     this.setState({
-      selectedItemId: index + 1
+      selectedItemId: id + 1
     })
   }
 
